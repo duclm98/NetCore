@@ -7,7 +7,7 @@ using System.IO;
 
 namespace NetCore.Data.Data
 {
-    class NetCoreDbContextFactory : IDesignTimeDbContextFactory<NetCoreDbContext>
+    public class NetCoreDbContextFactory : IDesignTimeDbContextFactory<NetCoreDbContext>
     {
         public NetCoreDbContext CreateDbContext(string[] args)
         {
