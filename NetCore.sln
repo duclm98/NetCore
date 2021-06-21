@@ -8,9 +8,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		README.md = README.md
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetCore.Data", "NetCore.Data\NetCore.Data.csproj", "{5C639657-92D4-4556-86CD-3B41A73333F7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetCore.Data", "NetCore.Data\NetCore.Data.csproj", "{5C639657-92D4-4556-86CD-3B41A73333F7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetCore.API", "NetCore.API\NetCore.API.csproj", "{15518DC9-FFC8-467C-806E-DA83937C6E66}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetCore.API", "NetCore.API\NetCore.API.csproj", "{15518DC9-FFC8-467C-806E-DA83937C6E66}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetCore.Helpers", "NetCore.Helpers\NetCore.Helpers.csproj", "{15B15A7F-932E-4F59-A4B6-C1D51E3FF9FA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -26,6 +28,10 @@ Global
 		{15518DC9-FFC8-467C-806E-DA83937C6E66}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{15518DC9-FFC8-467C-806E-DA83937C6E66}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{15518DC9-FFC8-467C-806E-DA83937C6E66}.Release|Any CPU.Build.0 = Release|Any CPU
+		{15B15A7F-932E-4F59-A4B6-C1D51E3FF9FA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{15B15A7F-932E-4F59-A4B6-C1D51E3FF9FA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{15B15A7F-932E-4F59-A4B6-C1D51E3FF9FA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{15B15A7F-932E-4F59-A4B6-C1D51E3FF9FA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -9,7 +9,7 @@ using NetCore.Data.Data;
 namespace NetCore.Data.Migrations
 {
     [DbContext(typeof(NetCoreDbContext))]
-    [Migration("20210617085150_InitDB")]
+    [Migration("20210621050719_InitDB")]
     partial class InitDB
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

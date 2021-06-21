@@ -6,10 +6,15 @@
 
   <ItemGroup>
     <PackageReference Include="BCrypt.Net-Next" Version="4.0.2" />
+    <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.2.2" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="5.0.0" />
+    <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="6.11.1" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.11.1" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\NetCore.Data\NetCore.Data.csproj" />
+    <ProjectReference Include="..\NetCore.Helpers\NetCore.Helpers.csproj" />
   </ItemGroup>
 
 

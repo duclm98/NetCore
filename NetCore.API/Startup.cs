@@ -13,6 +13,9 @@ using System.Linq;
 using System.Threading.Tasks;
 
 using NetCore.Data.Data;
+using NetCore.API.Repositories;
+using NetCore.API.Methods;
+using NetCore.API.Middlewares;
 
 namespace NetCore.API
 {
@@ -31,6 +34,8 @@ namespace NetCore.API
             services.AddControllers();
             services.AddDbContext<NetCoreDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("MSSQLConnection")));
+            services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IAuthMethod, AuthMethod>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -45,7 +50,7 @@ namespace NetCore.API
 
             app.UseRouting();
 
-            app.UseAuthorization();
+            app.UseMiddleware<AuthMiddleware>();
 
             app.UseEndpoints(endpoints =>
             {
