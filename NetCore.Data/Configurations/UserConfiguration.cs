@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using NetCore.Data.Models;
+using NetCore.Data.Entities;
 using NetCore.Data.Enums;
 
 namespace NetCore.Data.Configurations
@@ -10,8 +10,8 @@ namespace NetCore.Data.Configurations
         public void Configure(EntityTypeBuilder<User> builder)
         {
             builder.ToTable("Users");
-            builder.HasKey(x => x.ID);
-            builder.Property(x => x.ID);
+            builder.HasKey(x => x.UserId);
+            builder.Property(x => x.UserId).ValueGeneratedOnAdd().IsRequired();
             builder.Property(x => x.Username).IsRequired();
             builder.Property(x => x.Password).IsRequired();
             builder.Property(x => x.Role).HasDefaultValue(Role.Employee);

@@ -1,11 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Configuration.Json;
 using System.IO;
 
-namespace NetCore.Data.Data
+namespace NetCore.Data.Context
 {
     public class NetCoreDbContextFactory : IDesignTimeDbContextFactory<NetCoreDbContext>
     {

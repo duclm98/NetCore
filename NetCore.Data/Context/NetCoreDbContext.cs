@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Microsoft.EntityFrameworkCore;
-
-using NetCore.Data.Models;
+﻿using Microsoft.EntityFrameworkCore;
 using NetCore.Data.Configurations;
 using NetCore.Data.Extensions;
+using NetCore.Data.Entities;
 
-namespace NetCore.Data.Data
+namespace NetCore.Data.Context
 {
     public class NetCoreDbContext : DbContext
     {

@@ -1,14 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 
-namespace NetCore.Data.Models
+namespace NetCore.Data.Entities
 {
-    public class Product
+    public class Product : Base
     {
-        public long ID { get; set; }
+        public int ProductId { get; set; }
         public string Name { get; set; }
         public int Price { get; set; }
+
         public List<ProductInCategory> ProductInCategories { get; set; }
     }
 }
