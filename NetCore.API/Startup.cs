@@ -1,21 +1,16 @@
+using Autofac;
+using AutoWrapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using Microsoft.EntityFrameworkCore;
-using System;
+using Microsoft.OpenApi.Models;
+using NetCore.API.Dependencies;
+using NetCore.Data.Context;
+using NetCore.Data.Repositories;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-using NetCore.Data.Data;
-using NetCore.API.Repositories;
-using NetCore.API.Methods;
-using NetCore.API.Middlewares;
 
 namespace NetCore.API
 {
@@ -34,8 +29,45 @@ namespace NetCore.API
             services.AddControllers();
             services.AddDbContext<NetCoreDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("MSSQLConnection")));
-            services.AddScoped<IUserRepository, UserRepository>();
-            services.AddScoped<IAuthMethod, AuthMethod>();
+            services.AddSingleton<UnitOfWork>();
+
+            // Config Swagger
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo
+                {
+                    Title = "NetCore APIs",
+                    Version = "v1"
+                });
+                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                {
+                    Name = "Authorization",
+                    Type = SecuritySchemeType.ApiKey,
+                    Scheme = "Bearer",
+                    BearerFormat = "JWT",
+                    In = ParameterLocation.Header,
+                    Description = "JWT Authorization header using the Bearer scheme. Example: \"Bearer yourToken\""
+                });
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
+                    {
+                        new OpenApiSecurityScheme
+                        {
+                            Reference = new OpenApiReference
+                            {
+                                Id = "Bearer", Type = ReferenceType.SecurityScheme
+                            }
+                        },
+                        new List<string>()
+                    }
+                });
+                c.EnableAnnotations();
+            });
+        }
+
+        public void ConfigureContainer(ContainerBuilder builder)
+        {
+            builder.RegisterModule(new DependencyRegister());
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -45,13 +77,18 @@ namespace NetCore.API
             {
                 app.UseDeveloperExceptionPage();
             }
-
             app.UseHttpsRedirection();
-
             app.UseRouting();
-
-            app.UseMiddleware<AuthMiddleware>();
-
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint($"/swagger/v1/swagger.json", "NetCore v1");
+            });
+            app.UseApiResponseAndExceptionWrapper(new AutoWrapperOptions
+            {
+                BypassHTMLValidation = true,
+                UseApiProblemDetailsException = true
+            });
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();

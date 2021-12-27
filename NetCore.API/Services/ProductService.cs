@@ -1,0 +1,101 @@
+﻿using AutoMapper;
+using AutoWrapper.Wrappers;
+using Microsoft.EntityFrameworkCore;
+using NetCore.API.Dto.Product;
+using NetCore.Data.Entities;
+using NetCore.Data.Repositories;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+
+namespace NetCore.API.Services
+{
+    public interface IProductService
+    {
+        Task<ApiResponse> GetAll();
+        Task<ApiResponse> GetSingle(int productId);
+        Task<ApiResponse> Add(ProductCreateDto productCreateDto);
+        Task<ApiResponse> Update(int productId, ProductUpdateDto productUpdateDto);
+        Task<ApiResponse> Delete(int productId);
+    }
+
+    public class ProductService : IProductService
+    {
+        private readonly IMapper _mapper;
+        private readonly UnitOfWork _unitOfWork;
+
+        public ProductService(IMapper mapper, UnitOfWork unitOfWork)
+        {
+            _mapper = mapper;
+            _unitOfWork = unitOfWork;
+        }
+
+        public async Task<ApiResponse> GetAll()
+        {
+            var productQueryable = _unitOfWork.ProductRepository.Queryable;
+            var products = await productQueryable.ToListAsync();
+            var productDtos = GetInfo(products);
+            return new ApiResponse("Thành công", productDtos);
+        }
+
+        public async Task<ApiResponse> GetSingle(int productId)
+        {
+            var product = await _unitOfWork.ProductRepository.GetByID(productId);
+            if (product == null)
+                return new ApiResponse("Sản phẩm không tồn tại", null, 404);
+            var productDto = GetInfo(product);
+            return new ApiResponse("Thành công", productDto);
+        }
+
+        public async Task<ApiResponse> Add(ProductCreateDto productCreateDto)
+        {
+            var product = new Product
+            {
+                Name = productCreateDto.Name,
+                Price = productCreateDto.Price
+            };
+            await _unitOfWork.ProductRepository.Insert(product);
+            if (!await _unitOfWork.Save())
+                return new ApiResponse("Tạo sản phẩm không thành công", null, 500);
+
+            var productDto = GetInfo(product);
+            return new ApiResponse("Tạo sản phẩm thành công", productDto);
+        }
+
+        public async Task<ApiResponse> Update(int productId, ProductUpdateDto productUpdateDto)
+        {
+            var product = await _unitOfWork.ProductRepository.GetByID(productId);
+            if (product == null)
+                return new ApiResponse("Sản phẩm không tồn tại", null, 404);
+
+            product.Name = productUpdateDto.Name ?? product.Name;
+            product.Price = productUpdateDto.Price != 0 ? productUpdateDto.Price : product.Price;
+
+            _unitOfWork.ProductRepository.Update(product);
+            if (!await _unitOfWork.Save())
+                return new ApiResponse("Cập nhật sản phẩm không thành công", null, 500);
+
+            var productDto = GetInfo(product);
+            return new ApiResponse("Cập nhật sản phẩm thành công", productDto);
+        }
+
+        public async Task<ApiResponse> Delete(int productId)
+        {
+            var product = await _unitOfWork.ProductRepository.GetByID(productId);
+            if (product == null)
+                return new ApiResponse("Sản phẩm không tồn tại", null, 404);
+            _unitOfWork.ProductRepository.Delete(product);
+            if (!await _unitOfWork.Save())
+                return new ApiResponse("Xóa sản phẩm không thành công", null, 500);
+
+            var productDto = GetInfo(product);
+            return new ApiResponse("Xóa sản phẩm thành công", productDto);
+        }
+
+        // ============================= PRIVATE SERVICE ================================
+        private List<ProductDto> GetInfo(List<Product> products) =>
+            _mapper.Map<List<ProductDto>>(products);
+
+        private ProductDto GetInfo(Product product) =>
+            _mapper.Map<ProductDto>(product);
+    }
+}
