@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using NetCore.Data.Configurations;
 using NetCore.Data.Extensions;
-using NetCore.Data.Entities;
 
 namespace NetCore.Data.Context
 {
@@ -22,7 +21,5 @@ namespace NetCore.Data.Context
             // Data seeding
             modelBuilder.Seed();
         }
-
-        public DbSet<User> Users { get; set; }
     }
 }

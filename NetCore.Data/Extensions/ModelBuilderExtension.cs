@@ -1,8 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using NetCore.Data.Entities;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace NetCore.Data.Extensions
 {
@@ -28,7 +25,8 @@ namespace NetCore.Data.Extensions
                 }
             );
             modelBuilder.Entity<Product>().HasData(
-                new Product() {
+                new Product()
+                {
                     ProductId = 1,
                     Name = "Product 1",
                     Price = 100
