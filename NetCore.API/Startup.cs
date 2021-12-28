@@ -8,6 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using NetCore.API.Dependencies;
+using NetCore.API.QueueService;
 using NetCore.Data.Context;
 using NetCore.Data.Repositories;
 using System.Collections.Generic;
@@ -29,6 +30,17 @@ namespace NetCore.API
             services.AddControllers();
             services.AddDbContext<NetCoreDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("MSSQLConnection")));
+            services.AddHostedService<QueuedHostedService>();
+            services.AddSingleton<IBackgroundTaskQueue>(_ =>
+            {
+                if (!int.TryParse(Configuration["QueueCapacity"], out var queueCapacity))
+                {
+                    queueCapacity = 100;
+                }
+
+                return new DefaultBackgroundTaskQueue(queueCapacity);
+            });
+            services.AddSingleton<MonitorLoop>();
             services.AddSingleton<UnitOfWork>();
 
             // Config Swagger

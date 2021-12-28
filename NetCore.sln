@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.31321.278
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.32014.148
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{A9BB5750-3271-430A-A2BB-7973D3FEB330}"
 	ProjectSection(SolutionItems) = preProject
@@ -12,7 +12,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetCore.Data", "NetCore.Dat
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetCore.API", "NetCore.API\NetCore.API.csproj", "{15518DC9-FFC8-467C-806E-DA83937C6E66}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetCore.Helpers", "NetCore.Helpers\NetCore.Helpers.csproj", "{15B15A7F-932E-4F59-A4B6-C1D51E3FF9FA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetCore.Helpers", "NetCore.Helpers\NetCore.Helpers.csproj", "{15B15A7F-932E-4F59-A4B6-C1D51E3FF9FA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetCore.WorkerService", "NetCore.WorkerService\NetCore.WorkerService.csproj", "{DD39CB42-3CDA-4718-9E63-5969CD6123C7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -32,6 +34,10 @@ Global
 		{15B15A7F-932E-4F59-A4B6-C1D51E3FF9FA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{15B15A7F-932E-4F59-A4B6-C1D51E3FF9FA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{15B15A7F-932E-4F59-A4B6-C1D51E3FF9FA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DD39CB42-3CDA-4718-9E63-5969CD6123C7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DD39CB42-3CDA-4718-9E63-5969CD6123C7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DD39CB42-3CDA-4718-9E63-5969CD6123C7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DD39CB42-3CDA-4718-9E63-5969CD6123C7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

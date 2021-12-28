@@ -1,7 +1,12 @@
 ﻿using AutoMapper;
 using AutoWrapper.Wrappers;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using NetCore.API.Dto.Product;
+using NetCore.API.QueueService;
+using NetCore.API.QueueService.WorkerService;
+using NetCore.API.QueueService.WorkerService.ProductWorkerService;
 using NetCore.Data.Entities;
 using NetCore.Data.Repositories;
 using System.Collections.Generic;
@@ -20,11 +25,13 @@ namespace NetCore.API.Services
 
     public class ProductService : IProductService
     {
+        private readonly IHost _host;
         private readonly IMapper _mapper;
         private readonly UnitOfWork _unitOfWork;
 
-        public ProductService(IMapper mapper, UnitOfWork unitOfWork)
+        public ProductService(IMapper mapper, UnitOfWork unitOfWork, IHost host)
         {
+            _host = host;
             _mapper = mapper;
             _unitOfWork = unitOfWork;
         }
@@ -34,6 +41,11 @@ namespace NetCore.API.Services
             var productQueryable = _unitOfWork.ProductRepository.Queryable;
             var products = await productQueryable.ToListAsync();
             var productDtos = GetInfo(products);
+
+            //
+            MonitorLoop monitorLoop = _host.Services.GetRequiredService<MonitorLoop>()!;
+            await monitorLoop.MonitorAsync(new Service(new GetProductWorkerService()));
+
             return new ApiResponse("Thành công", productDtos);
         }
 
