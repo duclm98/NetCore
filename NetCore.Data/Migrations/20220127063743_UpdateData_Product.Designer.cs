@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NetCore.Data.Context;
 
 namespace NetCore.Data.Migrations
 {
     [DbContext(typeof(NetCoreDbContext))]
-    partial class NetCoreDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220127063743_UpdateData_Product")]
+    partial class UpdateData_Product
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

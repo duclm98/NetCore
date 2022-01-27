@@ -8,6 +8,6 @@ namespace NetCore.Data.Entities
         public string Username { get; set; }
         public string Password { get; set; }
         public string RefreshToken { get; set; }
-        public Role Role { get; set; }
+        public UserRole Role { get; set; }
     }
 }

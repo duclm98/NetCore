@@ -12,6 +12,7 @@
     <PackageReference Include="AutoWrapper.Core.Net5" Version="4.5.1" />
     <PackageReference Include="BCrypt.Net-Next" Version="4.0.2" />
     <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.2.2" />
+    <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="5.0.0" />
     <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="6.11.1" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
@@ -26,8 +27,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Methods\" />
-    <Folder Include="Middlewares\" />
     <Folder Include="Repositories\" />
   </ItemGroup>
 

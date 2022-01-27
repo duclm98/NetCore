@@ -7,6 +7,14 @@ namespace NetCore.Data.Extensions
     {
         public static void Seed(this ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<User>().HasData(
+                new User()
+                {
+                    UserId = 1,
+                    Username = "duclm21",
+                    Password = "$2a$05$pUOMJMojqb9AEY9ua8mMTOqa70Qyq4kFMiCWKPS8VaCh2N27OP6Ou" // 123456a@
+                }
+            );
             modelBuilder.Entity<Category>().HasData(
                 new Category()
                 {
@@ -48,6 +56,12 @@ namespace NetCore.Data.Extensions
                     ProductId = 4,
                     Name = "Product 4",
                     Price = 400
+                },
+                new Product()
+                {
+                    ProductId = 5,
+                    Name = "Product 5",
+                    Price = 900
                 }
             );
         }

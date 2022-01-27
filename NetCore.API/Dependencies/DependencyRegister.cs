@@ -1,6 +1,7 @@
 ﻿using Autofac;
 using AutoMapper.Contrib.Autofac.DependencyInjection;
 using NetCore.API.Services;
+using NetCore.API.SubServices;
 using System.Linq;
 
 namespace NetCore.API.Dependencies
@@ -12,8 +13,13 @@ namespace NetCore.API.Dependencies
             // AutoMapper
             builder.RegisterAutoMapper(typeof(Program).Assembly);
 
+            // Sub Service
+            builder.RegisterAssemblyTypes(typeof(UserSubService).Assembly)
+                .Where(x => x.Name.EndsWith("SubService"))
+                .AsImplementedInterfaces().InstancePerLifetimeScope();
+
             // Service
-            builder.RegisterAssemblyTypes(typeof(ProductService).Assembly)
+            builder.RegisterAssemblyTypes(typeof(UserService).Assembly)
                 .Where(x => x.Name.EndsWith("Service"))
                 .AsImplementedInterfaces().InstancePerLifetimeScope();
         }

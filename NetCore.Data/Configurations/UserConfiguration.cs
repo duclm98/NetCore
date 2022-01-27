@@ -14,7 +14,7 @@ namespace NetCore.Data.Configurations
             builder.Property(x => x.UserId).ValueGeneratedOnAdd().IsRequired();
             builder.Property(x => x.Username).IsRequired();
             builder.Property(x => x.Password).IsRequired();
-            builder.Property(x => x.Role).HasDefaultValue(Role.Employee);
+            builder.Property(x => x.Role).HasDefaultValue(UserRole.Employee);
         }
     }
 }

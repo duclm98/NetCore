@@ -8,6 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using NetCore.API.Dependencies;
+using NetCore.API.Middlewares;
 using NetCore.API.QueueService;
 using NetCore.Data.Context;
 using NetCore.Data.Repositories;
@@ -27,6 +28,7 @@ namespace NetCore.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddHttpContextAccessor();
             services.AddControllers();
             services.AddDbContext<NetCoreDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("MSSQLConnection")));
@@ -101,6 +103,7 @@ namespace NetCore.API
                 BypassHTMLValidation = true,
                 UseApiProblemDetailsException = true
             });
+            app.UseMiddleware<AuthenticationMiddleware>();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();

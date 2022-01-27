@@ -1,5 +1,7 @@
-﻿using NetCore.Data.Context;
+﻿using Microsoft.AspNetCore.Http;
+using NetCore.Data.Context;
 using NetCore.Data.Entities;
+using NetCore.Data.Models;
 using System;
 using System.Threading.Tasks;
 
@@ -8,15 +10,32 @@ namespace NetCore.Data.Repositories
     public class UnitOfWork : IDisposable
     {
         private readonly NetCoreDbContext context;
+        private readonly IHttpContextAccessor httpContextAccessor;
 
-        public UnitOfWork(NetCoreDbContext context)
+        public UnitOfWork(NetCoreDbContext context, IHttpContextAccessor httpContextAccessor)
         {
             this.context = context;
+            this.httpContextAccessor = httpContextAccessor;
         }
 
         public async Task<bool> Save()
         {
-            return await context.SaveChangesAsync() >= 0;
+            int? userId = null;
+            var httpContextUserId = httpContextAccessor.HttpContext?.Items["userId"];
+            if (httpContextUserId != null)
+                userId = (int?)httpContextUserId;
+
+            if (userId == null)
+                return await context.SaveChangesAsync() >= 0;
+            else
+            {
+                var auditLogCreateDto = new AuditLogCreateDto
+                {
+                    Method = httpContextAccessor.HttpContext?.Request.Method ?? string.Empty,
+                    UserId = userId.Value
+                };
+                return await context.SaveChangesAsync(auditLogCreateDto) > 0;
+            }
         }
 
         private BaseRepository<User> userRepository;

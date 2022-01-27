@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NetCore.Data.Context;
 
 namespace NetCore.Data.Migrations
 {
     [DbContext(typeof(NetCoreDbContext))]
-    partial class NetCoreDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220107095205_UpdateDB_Audit_Log")]
+    partial class UpdateDB_Audit_Log
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -97,23 +99,23 @@ namespace NetCore.Data.Migrations
                         new
                         {
                             CategoryId = 1,
-                            CreatedAt = new DateTime(2022, 1, 27, 13, 37, 43, 326, DateTimeKind.Local).AddTicks(7250),
+                            CreatedAt = new DateTime(2022, 1, 7, 16, 52, 5, 95, DateTimeKind.Local).AddTicks(1148),
                             Name = "Category 1",
-                            UpdatedAt = new DateTime(2022, 1, 27, 13, 37, 43, 326, DateTimeKind.Local).AddTicks(7257)
+                            UpdatedAt = new DateTime(2022, 1, 7, 16, 52, 5, 95, DateTimeKind.Local).AddTicks(7893)
                         },
                         new
                         {
                             CategoryId = 2,
-                            CreatedAt = new DateTime(2022, 1, 27, 13, 37, 43, 326, DateTimeKind.Local).AddTicks(7736),
+                            CreatedAt = new DateTime(2022, 1, 7, 16, 52, 5, 95, DateTimeKind.Local).AddTicks(8522),
                             Name = "Category 2",
-                            UpdatedAt = new DateTime(2022, 1, 27, 13, 37, 43, 326, DateTimeKind.Local).AddTicks(7740)
+                            UpdatedAt = new DateTime(2022, 1, 7, 16, 52, 5, 95, DateTimeKind.Local).AddTicks(8527)
                         },
                         new
                         {
                             CategoryId = 3,
-                            CreatedAt = new DateTime(2022, 1, 27, 13, 37, 43, 326, DateTimeKind.Local).AddTicks(7752),
+                            CreatedAt = new DateTime(2022, 1, 7, 16, 52, 5, 95, DateTimeKind.Local).AddTicks(8539),
                             Name = "Category 3",
-                            UpdatedAt = new DateTime(2022, 1, 27, 13, 37, 43, 326, DateTimeKind.Local).AddTicks(7753)
+                            UpdatedAt = new DateTime(2022, 1, 7, 16, 52, 5, 95, DateTimeKind.Local).AddTicks(8540)
                         });
                 });
 
@@ -151,42 +153,34 @@ namespace NetCore.Data.Migrations
                         new
                         {
                             ProductId = 1,
-                            CreatedAt = new DateTime(2022, 1, 27, 13, 37, 43, 326, DateTimeKind.Local).AddTicks(8171),
+                            CreatedAt = new DateTime(2022, 1, 7, 16, 52, 5, 96, DateTimeKind.Local).AddTicks(6606),
                             Name = "Product 1",
                             Price = 100,
-                            UpdatedAt = new DateTime(2022, 1, 27, 13, 37, 43, 326, DateTimeKind.Local).AddTicks(8174)
+                            UpdatedAt = new DateTime(2022, 1, 7, 16, 52, 5, 96, DateTimeKind.Local).AddTicks(6613)
                         },
                         new
                         {
                             ProductId = 2,
-                            CreatedAt = new DateTime(2022, 1, 27, 13, 37, 43, 326, DateTimeKind.Local).AddTicks(8840),
+                            CreatedAt = new DateTime(2022, 1, 7, 16, 52, 5, 96, DateTimeKind.Local).AddTicks(7256),
                             Name = "Product 2",
                             Price = 200,
-                            UpdatedAt = new DateTime(2022, 1, 27, 13, 37, 43, 326, DateTimeKind.Local).AddTicks(8844)
+                            UpdatedAt = new DateTime(2022, 1, 7, 16, 52, 5, 96, DateTimeKind.Local).AddTicks(7259)
                         },
                         new
                         {
                             ProductId = 3,
-                            CreatedAt = new DateTime(2022, 1, 27, 13, 37, 43, 326, DateTimeKind.Local).AddTicks(8861),
+                            CreatedAt = new DateTime(2022, 1, 7, 16, 52, 5, 96, DateTimeKind.Local).AddTicks(7279),
                             Name = "Product 3",
                             Price = 600,
-                            UpdatedAt = new DateTime(2022, 1, 27, 13, 37, 43, 326, DateTimeKind.Local).AddTicks(8862)
+                            UpdatedAt = new DateTime(2022, 1, 7, 16, 52, 5, 96, DateTimeKind.Local).AddTicks(7280)
                         },
                         new
                         {
                             ProductId = 4,
-                            CreatedAt = new DateTime(2022, 1, 27, 13, 37, 43, 326, DateTimeKind.Local).AddTicks(8863),
+                            CreatedAt = new DateTime(2022, 1, 7, 16, 52, 5, 96, DateTimeKind.Local).AddTicks(7281),
                             Name = "Product 4",
                             Price = 400,
-                            UpdatedAt = new DateTime(2022, 1, 27, 13, 37, 43, 326, DateTimeKind.Local).AddTicks(8864)
-                        },
-                        new
-                        {
-                            ProductId = 5,
-                            CreatedAt = new DateTime(2022, 1, 27, 13, 37, 43, 326, DateTimeKind.Local).AddTicks(8865),
-                            Name = "Product 5",
-                            Price = 900,
-                            UpdatedAt = new DateTime(2022, 1, 27, 13, 37, 43, 326, DateTimeKind.Local).AddTicks(8865)
+                            UpdatedAt = new DateTime(2022, 1, 7, 16, 52, 5, 96, DateTimeKind.Local).AddTicks(7282)
                         });
                 });
 
@@ -250,7 +244,7 @@ namespace NetCore.Data.Migrations
                     b.Property<int>("Role")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .HasDefaultValue(2);
+                        .HasDefaultValue(1);
 
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime2");
@@ -262,17 +256,6 @@ namespace NetCore.Data.Migrations
                     b.HasKey("UserId");
 
                     b.ToTable("Users");
-
-                    b.HasData(
-                        new
-                        {
-                            UserId = 1,
-                            CreatedAt = new DateTime(2022, 1, 27, 13, 37, 43, 325, DateTimeKind.Local).AddTicks(2502),
-                            Password = "$2a$05$pUOMJMojqb9AEY9ua8mMTOqa70Qyq4kFMiCWKPS8VaCh2N27OP6Ou",
-                            Role = 0,
-                            UpdatedAt = new DateTime(2022, 1, 27, 13, 37, 43, 325, DateTimeKind.Local).AddTicks(8499),
-                            Username = "duclm21"
-                        });
                 });
 
             modelBuilder.Entity("NetCore.Data.Entities.ProductInCategory", b =>
