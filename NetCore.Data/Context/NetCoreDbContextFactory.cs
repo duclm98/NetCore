@@ -14,10 +14,13 @@ namespace NetCore.Data.Context
                 .AddJsonFile("appsettings.json")
                 .Build();
 
-            var connectionString = configuration.GetConnectionString("MSSQLConnection");
-
             var optionsBuilder = new DbContextOptionsBuilder<NetCoreDbContext>();
-            optionsBuilder.UseSqlServer(connectionString);
+
+            //var connectionString = configuration.GetConnectionString("MSSQLConnection");
+            //optionsBuilder.UseSqlServer(connectionString);
+
+            var connectionString = configuration.GetConnectionString("PostgreSQLConnection");
+            optionsBuilder.UseNpgsql(connectionString);
 
             return new NetCoreDbContext(optionsBuilder.Options);
         }

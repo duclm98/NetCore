@@ -28,10 +28,16 @@ namespace NetCore.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            //var connectionString = Configuration.GetConnectionString("MSSQLConnection");
+            //services.AddDbContext<NetCoreDbContext>(options =>
+            //    options.UseSqlServer(connectionString));
+
+            var connectionString = Configuration.GetConnectionString("PostgreSQLConnection");
+            services.AddDbContext<NetCoreDbContext>(options =>
+                options.UseNpgsql(connectionString));
+
             services.AddHttpContextAccessor();
             services.AddControllers();
-            services.AddDbContext<NetCoreDbContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("MSSQLConnection")));
             services.AddHostedService<QueuedHostedService>();
             services.AddSingleton<IBackgroundTaskQueue>(_ =>
             {

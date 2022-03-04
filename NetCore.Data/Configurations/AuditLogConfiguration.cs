@@ -11,7 +11,7 @@ namespace NetCore.Data.Configurations
             builder.ToTable("AuditLogs");
             builder.HasKey(x => x.AuditLogId);
             builder.Property(x => x.AuditLogId).ValueGeneratedOnAdd().IsRequired();
-            builder.Property(x => x.CreatedAt).HasColumnType("datetime").IsRequired();
+            builder.Property(x => x.CreatedAt).IsRequired();
             builder.Property(x => x.Type).IsRequired();
             builder.Property(x => x.TableName).IsRequired();
             builder.Property(x => x.PrimaryKey).IsRequired();
