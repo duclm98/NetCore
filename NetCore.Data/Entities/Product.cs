@@ -8,6 +8,7 @@ namespace NetCore.Data.Entities
         public string Name { get; set; }
         public int Price { get; set; }
 
-        public List<ProductInCategory> ProductInCategories { get; set; }
+        public virtual ICollection<ProductInCategory> ProductInCategories { get; set; }
+        public virtual ICollection<Invoice> Invoices { get; set; }
     }
 }

@@ -10,7 +10,7 @@ using NetCore.Data.Context;
 namespace NetCore.Data.Migrations
 {
     [DbContext(typeof(NetCoreDbContext))]
-    [Migration("20211224031330_InitDB")]
+    [Migration("20220304082011_InitDB")]
     partial class InitDB
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -20,6 +20,46 @@ namespace NetCore.Data.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("ProductVersion", "5.0.7")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+            modelBuilder.Entity("NetCore.Data.Entities.AuditLog", b =>
+                {
+                    b.Property<int>("AuditLogId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("ColumnName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime");
+
+                    b.Property<string>("NewValues")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("OldValues")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PrimaryKey")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TableName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("AuditLogId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("AuditLogs");
+                });
 
             modelBuilder.Entity("NetCore.Data.Entities.Category", b =>
                 {
@@ -31,8 +71,8 @@ namespace NetCore.Data.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Creator")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int?>("CreatorId")
+                        .HasColumnType("int");
 
                     b.Property<DateTime?>("DeletedAt")
                         .HasColumnType("datetime2");
@@ -46,29 +86,31 @@ namespace NetCore.Data.Migrations
 
                     b.HasKey("CategoryId");
 
+                    b.HasIndex("CreatorId");
+
                     b.ToTable("Categories");
 
                     b.HasData(
                         new
                         {
                             CategoryId = 1,
-                            CreatedAt = new DateTime(2021, 12, 24, 10, 13, 29, 773, DateTimeKind.Local).AddTicks(6574),
+                            CreatedAt = new DateTime(2022, 3, 4, 15, 20, 10, 828, DateTimeKind.Local).AddTicks(1435),
                             Name = "Category 1",
-                            UpdatedAt = new DateTime(2021, 12, 24, 10, 13, 29, 774, DateTimeKind.Local).AddTicks(2359)
+                            UpdatedAt = new DateTime(2022, 3, 4, 15, 20, 10, 828, DateTimeKind.Local).AddTicks(1442)
                         },
                         new
                         {
                             CategoryId = 2,
-                            CreatedAt = new DateTime(2021, 12, 24, 10, 13, 29, 774, DateTimeKind.Local).AddTicks(3067),
+                            CreatedAt = new DateTime(2022, 3, 4, 15, 20, 10, 828, DateTimeKind.Local).AddTicks(1917),
                             Name = "Category 2",
-                            UpdatedAt = new DateTime(2021, 12, 24, 10, 13, 29, 774, DateTimeKind.Local).AddTicks(3072)
+                            UpdatedAt = new DateTime(2022, 3, 4, 15, 20, 10, 828, DateTimeKind.Local).AddTicks(1920)
                         },
                         new
                         {
                             CategoryId = 3,
-                            CreatedAt = new DateTime(2021, 12, 24, 10, 13, 29, 774, DateTimeKind.Local).AddTicks(3121),
+                            CreatedAt = new DateTime(2022, 3, 4, 15, 20, 10, 828, DateTimeKind.Local).AddTicks(1932),
                             Name = "Category 3",
-                            UpdatedAt = new DateTime(2021, 12, 24, 10, 13, 29, 774, DateTimeKind.Local).AddTicks(3122)
+                            UpdatedAt = new DateTime(2022, 3, 4, 15, 20, 10, 828, DateTimeKind.Local).AddTicks(1933)
                         });
                 });
 
@@ -82,8 +124,8 @@ namespace NetCore.Data.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Creator")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int?>("CreatorId")
+                        .HasColumnType("int");
 
                     b.Property<DateTime?>("DeletedAt")
                         .HasColumnType("datetime2");
@@ -100,40 +142,50 @@ namespace NetCore.Data.Migrations
 
                     b.HasKey("ProductId");
 
+                    b.HasIndex("CreatorId");
+
                     b.ToTable("Products");
 
                     b.HasData(
                         new
                         {
                             ProductId = 1,
-                            CreatedAt = new DateTime(2021, 12, 24, 10, 13, 29, 775, DateTimeKind.Local).AddTicks(1383),
+                            CreatedAt = new DateTime(2022, 3, 4, 15, 20, 10, 828, DateTimeKind.Local).AddTicks(2363),
                             Name = "Product 1",
                             Price = 100,
-                            UpdatedAt = new DateTime(2021, 12, 24, 10, 13, 29, 775, DateTimeKind.Local).AddTicks(1390)
+                            UpdatedAt = new DateTime(2022, 3, 4, 15, 20, 10, 828, DateTimeKind.Local).AddTicks(2368)
                         },
                         new
                         {
                             ProductId = 2,
-                            CreatedAt = new DateTime(2021, 12, 24, 10, 13, 29, 775, DateTimeKind.Local).AddTicks(2100),
+                            CreatedAt = new DateTime(2022, 3, 4, 15, 20, 10, 828, DateTimeKind.Local).AddTicks(2953),
                             Name = "Product 2",
                             Price = 200,
-                            UpdatedAt = new DateTime(2021, 12, 24, 10, 13, 29, 775, DateTimeKind.Local).AddTicks(2104)
+                            UpdatedAt = new DateTime(2022, 3, 4, 15, 20, 10, 828, DateTimeKind.Local).AddTicks(2956)
                         },
                         new
                         {
                             ProductId = 3,
-                            CreatedAt = new DateTime(2021, 12, 24, 10, 13, 29, 775, DateTimeKind.Local).AddTicks(2122),
+                            CreatedAt = new DateTime(2022, 3, 4, 15, 20, 10, 828, DateTimeKind.Local).AddTicks(2975),
                             Name = "Product 3",
                             Price = 600,
-                            UpdatedAt = new DateTime(2021, 12, 24, 10, 13, 29, 775, DateTimeKind.Local).AddTicks(2124)
+                            UpdatedAt = new DateTime(2022, 3, 4, 15, 20, 10, 828, DateTimeKind.Local).AddTicks(2976)
                         },
                         new
                         {
                             ProductId = 4,
-                            CreatedAt = new DateTime(2021, 12, 24, 10, 13, 29, 775, DateTimeKind.Local).AddTicks(2125),
+                            CreatedAt = new DateTime(2022, 3, 4, 15, 20, 10, 828, DateTimeKind.Local).AddTicks(2977),
                             Name = "Product 4",
                             Price = 400,
-                            UpdatedAt = new DateTime(2021, 12, 24, 10, 13, 29, 775, DateTimeKind.Local).AddTicks(2126)
+                            UpdatedAt = new DateTime(2022, 3, 4, 15, 20, 10, 828, DateTimeKind.Local).AddTicks(2978)
+                        },
+                        new
+                        {
+                            ProductId = 5,
+                            CreatedAt = new DateTime(2022, 3, 4, 15, 20, 10, 828, DateTimeKind.Local).AddTicks(2979),
+                            Name = "Product 5",
+                            Price = 900,
+                            UpdatedAt = new DateTime(2022, 3, 4, 15, 20, 10, 828, DateTimeKind.Local).AddTicks(2980)
                         });
                 });
 
@@ -150,8 +202,8 @@ namespace NetCore.Data.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Creator")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int?>("CreatorId")
+                        .HasColumnType("int");
 
                     b.Property<DateTime?>("DeletedAt")
                         .HasColumnType("datetime2");
@@ -165,6 +217,8 @@ namespace NetCore.Data.Migrations
                     b.HasKey("ProductInCategoryId");
 
                     b.HasIndex("CategoryId");
+
+                    b.HasIndex("CreatorId");
 
                     b.HasIndex("ProductId");
 
@@ -181,8 +235,8 @@ namespace NetCore.Data.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Creator")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int?>("CreatorId")
+                        .HasColumnType("int");
 
                     b.Property<DateTime?>("DeletedAt")
                         .HasColumnType("datetime2");
@@ -197,7 +251,7 @@ namespace NetCore.Data.Migrations
                     b.Property<int>("Role")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .HasDefaultValue(1);
+                        .HasDefaultValue(2);
 
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime2");
@@ -208,7 +262,48 @@ namespace NetCore.Data.Migrations
 
                     b.HasKey("UserId");
 
+                    b.HasIndex("CreatorId");
+
                     b.ToTable("Users");
+
+                    b.HasData(
+                        new
+                        {
+                            UserId = 1,
+                            CreatedAt = new DateTime(2022, 3, 4, 15, 20, 10, 826, DateTimeKind.Local).AddTicks(8197),
+                            Password = "$2a$05$pUOMJMojqb9AEY9ua8mMTOqa70Qyq4kFMiCWKPS8VaCh2N27OP6Ou",
+                            Role = 0,
+                            UpdatedAt = new DateTime(2022, 3, 4, 15, 20, 10, 827, DateTimeKind.Local).AddTicks(3627),
+                            Username = "duclm21"
+                        });
+                });
+
+            modelBuilder.Entity("NetCore.Data.Entities.AuditLog", b =>
+                {
+                    b.HasOne("NetCore.Data.Entities.User", "User")
+                        .WithMany("AuditLogs")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.ClientNoAction);
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("NetCore.Data.Entities.Category", b =>
+                {
+                    b.HasOne("NetCore.Data.Entities.User", "Creator")
+                        .WithMany()
+                        .HasForeignKey("CreatorId");
+
+                    b.Navigation("Creator");
+                });
+
+            modelBuilder.Entity("NetCore.Data.Entities.Product", b =>
+                {
+                    b.HasOne("NetCore.Data.Entities.User", "Creator")
+                        .WithMany()
+                        .HasForeignKey("CreatorId");
+
+                    b.Navigation("Creator");
                 });
 
             modelBuilder.Entity("NetCore.Data.Entities.ProductInCategory", b =>
@@ -219,6 +314,10 @@ namespace NetCore.Data.Migrations
                         .OnDelete(DeleteBehavior.ClientNoAction)
                         .IsRequired();
 
+                    b.HasOne("NetCore.Data.Entities.User", "Creator")
+                        .WithMany()
+                        .HasForeignKey("CreatorId");
+
                     b.HasOne("NetCore.Data.Entities.Product", "Product")
                         .WithMany("ProductInCategories")
                         .HasForeignKey("ProductId")
@@ -227,7 +326,18 @@ namespace NetCore.Data.Migrations
 
                     b.Navigation("Category");
 
+                    b.Navigation("Creator");
+
                     b.Navigation("Product");
+                });
+
+            modelBuilder.Entity("NetCore.Data.Entities.User", b =>
+                {
+                    b.HasOne("NetCore.Data.Entities.User", "Creator")
+                        .WithMany("CreateItems")
+                        .HasForeignKey("CreatorId");
+
+                    b.Navigation("Creator");
                 });
 
             modelBuilder.Entity("NetCore.Data.Entities.Category", b =>
@@ -238,6 +348,13 @@ namespace NetCore.Data.Migrations
             modelBuilder.Entity("NetCore.Data.Entities.Product", b =>
                 {
                     b.Navigation("ProductInCategories");
+                });
+
+            modelBuilder.Entity("NetCore.Data.Entities.User", b =>
+                {
+                    b.Navigation("AuditLogs");
+
+                    b.Navigation("CreateItems");
                 });
 #pragma warning restore 612, 618
         }

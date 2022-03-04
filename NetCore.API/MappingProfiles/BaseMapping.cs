@@ -9,7 +9,6 @@ namespace NetCore.API.MappingProfiles
         public BaseMapping()
         {
             CreateMap<Base, BaseDto>()
-                .ForMember(x => x.Creator, y => y.MapFrom(z => "empty"))
                 .ReverseMap();
         }
     }

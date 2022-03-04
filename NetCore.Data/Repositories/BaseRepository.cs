@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using NetCore.Data.Context;
 using NetCore.Data.Entities;
 using System;
@@ -12,11 +13,13 @@ namespace NetCore.Data.Repositories
     {
         internal NetCoreDbContext context;
         internal DbSet<TEntity> dbSet;
+        private readonly IHttpContextAccessor httpContextAccessor;
 
-        public BaseRepository(NetCoreDbContext context)
+        public BaseRepository(NetCoreDbContext context, IHttpContextAccessor httpContextAccessor)
         {
             this.context = context;
             dbSet = context.Set<TEntity>();
+            this.httpContextAccessor = httpContextAccessor;
         }
 
         public virtual IQueryable<TEntity> Queryable =>
@@ -32,11 +35,18 @@ namespace NetCore.Data.Repositories
 
         public virtual async Task Insert(TEntity entity)
         {
+            entity.CreatorId = GetCreator();
             await dbSet.AddAsync(entity);
         }
 
         public virtual async Task Insert(List<TEntity> entities)
         {
+            var creator = GetCreator();
+            entities.Select(x =>
+            {
+                x.CreatorId = creator;
+                return x;
+            });
             await dbSet.AddRangeAsync(entities);
         }
 
@@ -74,6 +84,15 @@ namespace NetCore.Data.Repositories
             });
             dbSet.AttachRange(entities);
             context.Entry(entities).State = EntityState.Modified;
+        }
+
+        private int? GetCreator()
+        {
+            int? creator = null;
+            var httpContextUserId = httpContextAccessor.HttpContext?.Items["userId"];
+            if (httpContextUserId != null)
+                creator = (int?)httpContextUserId;
+            return creator;
         }
     }
 }

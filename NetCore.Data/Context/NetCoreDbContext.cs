@@ -22,6 +22,7 @@ namespace NetCore.Data.Context
             // Configure using Fluent API
             modelBuilder.ApplyConfiguration(new AuditLogConfiguration());
             modelBuilder.ApplyConfiguration(new CategoryConfiguration());
+            modelBuilder.ApplyConfiguration(new InvoiceConfiguration());
             modelBuilder.ApplyConfiguration(new ProductConfiguration());
             modelBuilder.ApplyConfiguration(new ProductInCategoryConfiguration());
             modelBuilder.ApplyConfiguration(new UserConfiguration());
@@ -32,6 +33,7 @@ namespace NetCore.Data.Context
 
         public DbSet<AuditLog> AuditLogs { set; get; }
         public DbSet<Category> Categories { set; get; }
+        public DbSet<Invoice> Invoices { set; get; }
         public DbSet<Product> Products { set; get; }
         public DbSet<ProductInCategory> ProductInCategories { set; get; }
         public DbSet<User> Users { set; get; }
@@ -58,8 +60,7 @@ namespace NetCore.Data.Context
                 {
                     Method = auditLogCreateDto.Method,
                     TableName = entry.Entity.GetType().Name,
-                    UserId = auditLogCreateDto.UserId,
-                    Creator = auditLogCreateDto.Creator
+                    UserId = auditLogCreateDto.UserId
                 };
                 auditEntries.Add(auditEntry);
                 foreach (var property in entry.Properties)

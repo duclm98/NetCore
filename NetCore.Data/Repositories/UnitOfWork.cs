@@ -24,18 +24,12 @@ namespace NetCore.Data.Repositories
             var httpContextUserId = httpContextAccessor.HttpContext?.Items["userId"];
             if (httpContextUserId != null)
                 userId = (int?)httpContextUserId;
-
-            if (userId == null)
-                return await context.SaveChangesAsync() >= 0;
-            else
+            var auditLogCreateDto = new AuditLogCreateDto
             {
-                var auditLogCreateDto = new AuditLogCreateDto
-                {
-                    Method = httpContextAccessor.HttpContext?.Request.Method ?? string.Empty,
-                    UserId = userId.Value
-                };
-                return await context.SaveChangesAsync(auditLogCreateDto) > 0;
-            }
+                Method = httpContextAccessor.HttpContext?.Request.Method ?? string.Empty,
+                UserId = userId
+            };
+            return await context.SaveChangesAsync(auditLogCreateDto) > 0;
         }
 
         private BaseRepository<User> userRepository;
@@ -44,7 +38,7 @@ namespace NetCore.Data.Repositories
             get
             {
                 if (userRepository == null)
-                    userRepository = new BaseRepository<User>(context);
+                    userRepository = new BaseRepository<User>(context, httpContextAccessor);
                 return userRepository;
             }
         }
@@ -55,7 +49,7 @@ namespace NetCore.Data.Repositories
             get
             {
                 if (productRepository == null)
-                    productRepository = new BaseRepository<Product>(context);
+                    productRepository = new BaseRepository<Product>(context, httpContextAccessor);
                 return productRepository;
             }
         }
@@ -66,7 +60,7 @@ namespace NetCore.Data.Repositories
             get
             {
                 if (categoryRepository == null)
-                    categoryRepository = new BaseRepository<Category>(context);
+                    categoryRepository = new BaseRepository<Category>(context, httpContextAccessor);
                 return categoryRepository;
             }
         }
@@ -77,7 +71,7 @@ namespace NetCore.Data.Repositories
             get
             {
                 if (productInCategoryRepository == null)
-                    productInCategoryRepository = new BaseRepository<ProductInCategory>(context);
+                    productInCategoryRepository = new BaseRepository<ProductInCategory>(context, httpContextAccessor);
                 return productInCategoryRepository;
             }
         }
