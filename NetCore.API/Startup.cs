@@ -1,5 +1,4 @@
 using Autofac;
-using AutoWrapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -12,6 +11,7 @@ using NetCore.API.Middlewares;
 using NetCore.API.QueueService;
 using NetCore.Data.Context;
 using NetCore.Data.Repositories;
+using NetCore.Helpers.Exceptions;
 using System.Collections.Generic;
 
 namespace NetCore.API
@@ -104,11 +104,7 @@ namespace NetCore.API
             {
                 c.SwaggerEndpoint($"/swagger/v1/swagger.json", "NetCore v1");
             });
-            app.UseApiResponseAndExceptionWrapper(new AutoWrapperOptions
-            {
-                BypassHTMLValidation = true,
-                UseApiProblemDetailsException = true
-            });
+            app.UseMiddleware<CustomExceptionMiddleware>();
             app.UseMiddleware<AuthenticationMiddleware>();
             app.UseEndpoints(endpoints =>
             {

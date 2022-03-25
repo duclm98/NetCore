@@ -9,6 +9,7 @@ using NetCore.API.QueueService.WorkerService;
 using NetCore.API.QueueService.WorkerService.ProductWorkerService;
 using NetCore.Data.Entities;
 using NetCore.Data.Repositories;
+using NetCore.Helpers.Exceptions;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -53,7 +54,7 @@ namespace NetCore.API.Services
         {
             var product = await _unitOfWork.ProductRepository.GetByID(productId);
             if (product == null)
-                return new ApiResponse("Sản phẩm không tồn tại", null, 404);
+                throw new CustomException(404, "Sản phẩm không tồn tại");
             var productDto = GetInfo(product);
             return new ApiResponse("Thành công", productDto);
         }
@@ -67,7 +68,7 @@ namespace NetCore.API.Services
             };
             await _unitOfWork.ProductRepository.Insert(product);
             if (!await _unitOfWork.Save())
-                return new ApiResponse("Tạo sản phẩm không thành công", null, 500);
+                throw new CustomException(500, "Tạo sản phẩm không thành công");
 
             var productDto = GetInfo(product);
             return new ApiResponse("Tạo sản phẩm thành công", productDto);
@@ -77,14 +78,14 @@ namespace NetCore.API.Services
         {
             var product = await _unitOfWork.ProductRepository.GetByID(productId);
             if (product == null)
-                return new ApiResponse("Sản phẩm không tồn tại", null, 404);
+                throw new CustomException(404, "Sản phẩm không tồn tại");
 
             product.Name = productUpdateDto.Name ?? product.Name;
             product.Price = productUpdateDto.Price != 0 ? productUpdateDto.Price : product.Price;
 
             _unitOfWork.ProductRepository.Update(product);
             if (!await _unitOfWork.Save())
-                return new ApiResponse("Cập nhật sản phẩm không thành công", null, 500);
+                throw new CustomException(500, "Cập nhật sản phẩm không thành công");
 
             var productDto = GetInfo(product);
             return new ApiResponse("Cập nhật sản phẩm thành công", productDto);
@@ -94,10 +95,10 @@ namespace NetCore.API.Services
         {
             var product = await _unitOfWork.ProductRepository.GetByID(productId);
             if (product == null)
-                return new ApiResponse("Sản phẩm không tồn tại", null, 404);
+                throw new CustomException(404, "Sản phẩm không tồn tại");
             _unitOfWork.ProductRepository.Delete(product);
             if (!await _unitOfWork.Save())
-                return new ApiResponse("Xóa sản phẩm không thành công", null, 500);
+                throw new CustomException(500, "Xóa sản phẩm không thành công");
 
             var productDto = GetInfo(product);
             return new ApiResponse("Xóa sản phẩm thành công", productDto);

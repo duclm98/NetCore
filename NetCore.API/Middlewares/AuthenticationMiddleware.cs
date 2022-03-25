@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using NetCore.API.SubServices;
 using NetCore.Data.Repositories;
+using NetCore.Helpers.Exceptions;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -29,30 +30,18 @@ namespace NetCore.API.Middlewares
                 var accessToken = httpContext.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
 
                 if (accessToken == null)
-                {
-                    httpContext.Response.StatusCode = 401;
-                    await httpContext.Response.WriteAsync("Thiếu access token!");
-                    return;
-                }
+                    throw new CustomException(401, "Thiếu access token!");
 
                 var userId = userSubService.ValidateJsonWebToken(accessToken);
 
                 if (userId == null)
-                {
-                    httpContext.Response.StatusCode = 401;
-                    await httpContext.Response.WriteAsync("Access token không hợp lệ hoặc đã hết hạn!");
-                    return;
-                }
+                    throw new CustomException(401, "Access token không hợp lệ hoặc đã hết hạn!");
 
                 var userQueryable = unitOfWork.UserRepository.Queryable
                         .Where(x => x.UserId == userId);
 
                 if (!await userQueryable.AnyAsync())
-                {
-                    httpContext.Response.StatusCode = 401;
-                    await httpContext.Response.WriteAsync("Không xác thực bảo mật!");
-                    return;
-                }
+                    throw new CustomException(401, "Không xác thực bảo mật!");
 
                 httpContext.Items["userId"] = userId;
             }

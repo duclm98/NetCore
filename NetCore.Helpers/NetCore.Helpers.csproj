@@ -5,14 +5,21 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Constants\" />
-    <Folder Include="Handlers\" />
-    <Folder Include="Exceptions\" />
+    <Compile Remove="Constants\**" />
+    <Compile Remove="Handlers\**" />
+    <EmbeddedResource Remove="Constants\**" />
+    <EmbeddedResource Remove="Handlers\**" />
+    <None Remove="Constants\**" />
+    <None Remove="Handlers\**" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.2.2" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="5.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\NetCore.Data\NetCore.Data.csproj" />
   </ItemGroup>
 
 </Project>

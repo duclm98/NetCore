@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Z.EntityFramework.Plus;
 
 namespace NetCore.Data.Repositories
 {
@@ -23,7 +24,7 @@ namespace NetCore.Data.Repositories
         }
 
         public virtual IQueryable<TEntity> Queryable =>
-            dbSet.Where(x => x.DeletedAt == null);
+            dbSet.IncludeOptimized(x => x.Creator).Where(x => x.DeletedAt == null);
 
         public virtual async Task<TEntity> GetByID(object id)
         {
