@@ -12,6 +12,7 @@ using NetCore.API.QueueService;
 using NetCore.Data.Context;
 using NetCore.Data.Repositories;
 using NetCore.Helpers.Exceptions;
+using Newtonsoft.Json;
 using System.Collections.Generic;
 
 namespace NetCore.API
@@ -37,7 +38,11 @@ namespace NetCore.API
                 options.UseNpgsql(connectionString));
 
             services.AddHttpContextAccessor();
-            services.AddControllers();
+            services.AddControllers().AddNewtonsoftJson(options =>
+            {
+                options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+                options.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
+            });
             services.AddHostedService<QueuedHostedService>();
             services.AddSingleton<IBackgroundTaskQueue>(_ =>
             {

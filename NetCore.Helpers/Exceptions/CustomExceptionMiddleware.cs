@@ -39,7 +39,8 @@ namespace NetCore.Helpers.Exceptions
                 result = new ErrorDetail()
                 {
                     Message = exception.Message,
-                    StatusCode = exception.StatusCode
+                    StatusCode = exception.StatusCode,
+                    Result = exception.Result
                 }.ToString();
                 context.Response.StatusCode = exception.StatusCode;
             }
@@ -62,7 +63,7 @@ namespace NetCore.Helpers.Exceptions
                 Message = exception.Message,
                 StatusCode = (int)HttpStatusCode.InternalServerError
             }.ToString();
-            context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+            context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
             return context.Response.WriteAsync(result);
         }
     }
