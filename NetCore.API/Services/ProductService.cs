@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using Autofac;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -31,11 +32,11 @@ namespace NetCore.API.Services
         private readonly IMapper _mapper;
         private readonly UnitOfWork _unitOfWork;
 
-        public ProductService(IMapper mapper, UnitOfWork unitOfWork, IHost host)
+        public ProductService(IComponentContext componentContext)
         {
-            _host = host;
-            _mapper = mapper;
-            _unitOfWork = unitOfWork;
+            _host = componentContext.Resolve<IHost>();
+            _mapper = componentContext.Resolve<IMapper>();
+            _unitOfWork = componentContext.Resolve<UnitOfWork>();
         }
 
         public async Task<IActionResult> GetAll()

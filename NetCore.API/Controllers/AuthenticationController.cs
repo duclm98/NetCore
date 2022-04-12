@@ -1,5 +1,4 @@
-﻿using AutoWrapper.Wrappers;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using NetCore.API.Dto.Authentication;
 using NetCore.API.Services;
 using Swashbuckle.AspNetCore.Annotations;
@@ -20,7 +19,7 @@ namespace NetCore.API.Controllers
 
         [SwaggerOperation(Summary = "Đăng nhập")]
         [HttpPost("login")]
-        public async Task<ApiResponse> Add([FromBody] LoginCreateDto loginCreatedto)
+        public async Task<IActionResult> Add([FromBody] LoginCreateDto loginCreatedto)
         {
             return await _userService.Login(loginCreatedto);
         }

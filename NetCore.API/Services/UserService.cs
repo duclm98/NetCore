@@ -1,8 +1,11 @@
-﻿using AutoWrapper.Wrappers;
+﻿using Autofac;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NetCore.API.Dto.Authentication;
 using NetCore.API.SubServices;
 using NetCore.Data.Repositories;
+using NetCore.Helpers.Exceptions;
+using NetCore.Helpers.Result;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -10,7 +13,7 @@ namespace NetCore.API.Services
 {
     public interface IUserService
     {
-        Task<ApiResponse> Login(LoginCreateDto loginCreatedto);
+        Task<IActionResult> Login(LoginCreateDto loginCreatedto);
     }
 
     public class UserService : IUserService
@@ -18,27 +21,23 @@ namespace NetCore.API.Services
         private readonly UnitOfWork _unitOfWork;
         private readonly IUserSubService _userSubService;
 
-        public UserService(UnitOfWork unitOfWork, IUserSubService userSubService)
+        public UserService(IComponentContext componentContext)
         {
-            _unitOfWork = unitOfWork;
-            _userSubService = userSubService;
+            _unitOfWork = componentContext.Resolve<UnitOfWork>();
+            _userSubService = componentContext.Resolve<IUserSubService>();
         }
 
-        public async Task<ApiResponse> Login(LoginCreateDto loginCreatedto)
+        public async Task<IActionResult> Login(LoginCreateDto loginCreatedto)
         {
             var user = await _unitOfWork.UserRepository.Queryable
                 .Where(x => x.Username == loginCreatedto.Username)
                 .FirstOrDefaultAsync();
             if (user == null)
-                return new ApiResponse("Tên đăng nhập hoặc mật khẩu không chính xác", null, 409);
-
-            //var isMatch = BCrypt.Net.BCrypt.Verify(loginCreatedto.Password, user.Password);
-            //if (!isMatch)
-            //    return new ApiResponse("Tên đăng nhập hoặc mật khẩu không chính xác", null, 409);
+                throw new CustomException("Tên đăng nhập hoặc mật khẩu không chính xác", 401);
 
             var accessToken = _userSubService.GenerateJsonWebToken(user.UserId);
 
-            return new ApiResponse("Đăng nhập thành công", new
+            return new CustomResult("Đăng nhập thành công", new
             {
                 User = new
                 {
