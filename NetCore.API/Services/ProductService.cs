@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using AutoWrapper.Wrappers;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -10,6 +10,7 @@ using NetCore.API.QueueService.WorkerService.ProductWorkerService;
 using NetCore.Data.Entities;
 using NetCore.Data.Repositories;
 using NetCore.Helpers.Exceptions;
+using NetCore.Helpers.Result;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -17,11 +18,11 @@ namespace NetCore.API.Services
 {
     public interface IProductService
     {
-        Task<ApiResponse> GetAll();
-        Task<ApiResponse> GetSingle(int productId);
-        Task<ApiResponse> Add(ProductCreateDto productCreateDto);
-        Task<ApiResponse> Update(int productId, ProductUpdateDto productUpdateDto);
-        Task<ApiResponse> Delete(int productId);
+        Task<IActionResult> GetAll();
+        Task<IActionResult> GetSingle(int productId);
+        Task<IActionResult> Add(ProductCreateDto productCreateDto);
+        Task<IActionResult> Update(int productId, ProductUpdateDto productUpdateDto);
+        Task<IActionResult> Delete(int productId);
     }
 
     public class ProductService : IProductService
@@ -37,7 +38,7 @@ namespace NetCore.API.Services
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<ApiResponse> GetAll()
+        public async Task<IActionResult> GetAll()
         {
             var productQueryable = _unitOfWork.ProductRepository.Queryable;
             var products = await productQueryable.ToListAsync();
@@ -47,19 +48,19 @@ namespace NetCore.API.Services
             MonitorLoop monitorLoop = _host.Services.GetRequiredService<MonitorLoop>()!;
             await monitorLoop.MonitorAsync(new Service(new GetProductWorkerService()));
 
-            return new ApiResponse("Thành công", productDtos);
+            return new CustomResult("Thành công", productDtos);
         }
 
-        public async Task<ApiResponse> GetSingle(int productId)
+        public async Task<IActionResult> GetSingle(int productId)
         {
             var product = await _unitOfWork.ProductRepository.GetByID(productId);
             if (product == null)
-                throw new CustomException(404, "Sản phẩm không tồn tại");
+                throw new CustomException("Sản phẩm không tồn tại", 404);
             var productDto = GetInfo(product);
-            return new ApiResponse("Thành công", productDto);
+            return new CustomResult("Thành công", productDto);
         }
 
-        public async Task<ApiResponse> Add(ProductCreateDto productCreateDto)
+        public async Task<IActionResult> Add(ProductCreateDto productCreateDto)
         {
             var product = new Product
             {
@@ -68,40 +69,40 @@ namespace NetCore.API.Services
             };
             await _unitOfWork.ProductRepository.Insert(product);
             if (!await _unitOfWork.Save())
-                throw new CustomException(500, "Tạo sản phẩm không thành công");
+                throw new CustomException("Tạo sản phẩm không thành công", 500);
 
             var productDto = GetInfo(product);
-            return new ApiResponse("Tạo sản phẩm thành công", productDto);
+            return new CustomResult("Tạo sản phẩm thành công", productDto, 201);
         }
 
-        public async Task<ApiResponse> Update(int productId, ProductUpdateDto productUpdateDto)
+        public async Task<IActionResult> Update(int productId, ProductUpdateDto productUpdateDto)
         {
             var product = await _unitOfWork.ProductRepository.GetByID(productId);
             if (product == null)
-                throw new CustomException(404, "Sản phẩm không tồn tại");
+                throw new CustomException("Sản phẩm không tồn tại", 404);
 
             product.Name = productUpdateDto.Name ?? product.Name;
             product.Price = productUpdateDto.Price != 0 ? productUpdateDto.Price : product.Price;
 
             _unitOfWork.ProductRepository.Update(product);
             if (!await _unitOfWork.Save())
-                throw new CustomException(500, "Cập nhật sản phẩm không thành công");
+                throw new CustomException("Cập nhật sản phẩm không thành công", 500);
 
             var productDto = GetInfo(product);
-            return new ApiResponse("Cập nhật sản phẩm thành công", productDto);
+            return new CustomResult("Cập nhật sản phẩm thành công", productDto);
         }
 
-        public async Task<ApiResponse> Delete(int productId)
+        public async Task<IActionResult> Delete(int productId)
         {
             var product = await _unitOfWork.ProductRepository.GetByID(productId);
             if (product == null)
-                throw new CustomException(404, "Sản phẩm không tồn tại");
+                throw new CustomException("Sản phẩm không tồn tại", 404);
             _unitOfWork.ProductRepository.Delete(product);
             if (!await _unitOfWork.Save())
-                throw new CustomException(500, "Xóa sản phẩm không thành công");
+                throw new CustomException("Xóa sản phẩm không thành công", 500);
 
             var productDto = GetInfo(product);
-            return new ApiResponse("Xóa sản phẩm thành công", productDto);
+            return new CustomResult("Xóa sản phẩm thành công", productDto);
         }
 
         // ============================= PRIVATE SERVICE ================================

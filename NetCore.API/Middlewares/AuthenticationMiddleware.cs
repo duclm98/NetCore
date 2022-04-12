@@ -30,18 +30,18 @@ namespace NetCore.API.Middlewares
                 var accessToken = httpContext.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
 
                 if (accessToken == null)
-                    throw new CustomException(401, "Thiếu access token!");
+                    throw new CustomException("Thiếu access token!", 401);
 
                 var userId = userSubService.ValidateJsonWebToken(accessToken);
 
                 if (userId == null)
-                    throw new CustomException(401, "Access token không hợp lệ hoặc đã hết hạn!");
+                    throw new CustomException("Access token không hợp lệ hoặc đã hết hạn!", 401);
 
                 var userQueryable = unitOfWork.UserRepository.Queryable
                         .Where(x => x.UserId == userId);
 
                 if (!await userQueryable.AnyAsync())
-                    throw new CustomException(401, "Không xác thực bảo mật!");
+                    throw new CustomException("Không xác thực bảo mật!", 401);
 
                 httpContext.Items["userId"] = userId;
             }

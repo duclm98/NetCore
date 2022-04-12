@@ -13,6 +13,7 @@ using NetCore.Data.Context;
 using NetCore.Data.Repositories;
 using NetCore.Helpers.Exceptions;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using System.Collections.Generic;
 
 namespace NetCore.API
@@ -40,7 +41,7 @@ namespace NetCore.API
             services.AddHttpContextAccessor();
             services.AddControllers().AddNewtonsoftJson(options =>
             {
-                options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+                options.SerializerSettings.DefaultValueHandling = DefaultValueHandling.Include;
                 options.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
             });
             services.AddHostedService<QueuedHostedService>();

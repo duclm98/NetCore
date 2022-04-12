@@ -12,8 +12,8 @@ namespace NetCore.Data.Repositories
 {
     public class BaseRepository<TEntity> where TEntity : Base
     {
-        internal NetCoreDbContext context;
-        internal DbSet<TEntity> dbSet;
+        private readonly NetCoreDbContext context;
+        private readonly DbSet<TEntity> dbSet;
         private readonly IHttpContextAccessor httpContextAccessor;
 
         public BaseRepository(NetCoreDbContext context, IHttpContextAccessor httpContextAccessor)
@@ -36,16 +36,16 @@ namespace NetCore.Data.Repositories
 
         public virtual async Task Insert(TEntity entity)
         {
-            entity.CreatorId = GetCreator();
+            entity.CreatorId = GetCreatorId();
             await dbSet.AddAsync(entity);
         }
 
         public virtual async Task Insert(List<TEntity> entities)
         {
-            var creator = GetCreator();
+            var creatorId = GetCreatorId();
             entities.Select(x =>
             {
-                x.CreatorId = creator;
+                x.CreatorId = creatorId;
                 return x;
             });
             await dbSet.AddRangeAsync(entities);
@@ -87,13 +87,13 @@ namespace NetCore.Data.Repositories
             context.Entry(entities).State = EntityState.Modified;
         }
 
-        private int? GetCreator()
+        private int? GetCreatorId()
         {
-            int? creator = null;
+            int? creatorId = null;
             var httpContextUserId = httpContextAccessor.HttpContext?.Items["userId"];
             if (httpContextUserId != null)
-                creator = (int?)httpContextUserId;
-            return creator;
+                creatorId = (int?)httpContextUserId;
+            return creatorId;
         }
     }
 }

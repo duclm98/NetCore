@@ -1,9 +1,9 @@
 ﻿using System.Text.Json;
 using JsonSerializer = System.Text.Json.JsonSerializer;
 
-namespace NetCore.Helpers.Exceptions
+namespace NetCore.Helpers.Responses
 {
-    public class ErrorDetail
+    public class ResultDetail
     {
         public int StatusCode { get; set; }
         public string Message { get; set; }

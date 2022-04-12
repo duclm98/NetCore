@@ -9,7 +9,7 @@ namespace NetCore.Helpers.Exceptions
         public object Result { get; set; }
         public string ContentType { get; set; } = @"text/plain";
 
-        public CustomException(int statusCode, string message, object result = null)
+        public CustomException(string message, int statusCode, object result = null)
             : base(message)
         {
             this.StatusCode = statusCode;
@@ -17,10 +17,10 @@ namespace NetCore.Helpers.Exceptions
         }
 
         public CustomException(int statusCode, Exception inner)
-            : this(statusCode, inner.ToString()) { }
+            : this(inner.ToString(), statusCode) { }
 
         public CustomException(int statusCode, JObject errorObject)
-            : this(statusCode, errorObject.ToString())
+            : this(errorObject.ToString(), statusCode)
         {
             this.ContentType = @"application/json";
         }

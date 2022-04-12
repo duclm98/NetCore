@@ -11,8 +11,4 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="6.0.0" />
   </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\NetCore.Data\NetCore.Data.csproj" />
-  </ItemGroup>
 </Project>
