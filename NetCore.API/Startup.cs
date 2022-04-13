@@ -1,20 +1,21 @@
 using Autofac;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.OpenApi.Models;
 using NetCore.API.Dependencies;
+using NetCore.API.Helpers;
 using NetCore.API.Middlewares;
 using NetCore.API.QueueService;
 using NetCore.Data.Context;
 using NetCore.Data.Repositories;
 using NetCore.Helpers.Exceptions;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
-using System.Collections.Generic;
+using System.Linq;
 
 namespace NetCore.API
 {
@@ -57,38 +58,21 @@ namespace NetCore.API
             services.AddSingleton<MonitorLoop>();
             services.AddSingleton<UnitOfWork>();
 
-            // Config Swagger
-            services.AddSwaggerGen(c =>
+            services.AddApiVersioning(setup =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo
-                {
-                    Title = "NetCore APIs",
-                    Version = "v1"
-                });
-                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
-                {
-                    Name = "Authorization",
-                    Type = SecuritySchemeType.ApiKey,
-                    Scheme = "Bearer",
-                    BearerFormat = "JWT",
-                    In = ParameterLocation.Header,
-                    Description = "JWT Authorization header using the Bearer scheme. Example: \"Bearer yourToken\""
-                });
-                c.AddSecurityRequirement(new OpenApiSecurityRequirement
-                {
-                    {
-                        new OpenApiSecurityScheme
-                        {
-                            Reference = new OpenApiReference
-                            {
-                                Id = "Bearer", Type = ReferenceType.SecurityScheme
-                            }
-                        },
-                        new List<string>()
-                    }
-                });
-                c.EnableAnnotations();
+                setup.DefaultApiVersion = new ApiVersion(1, 0);
+                setup.AssumeDefaultVersionWhenUnspecified = true;
+                setup.ReportApiVersions = true;
             });
+
+            services.AddVersionedApiExplorer(setup =>
+            {
+                setup.GroupNameFormat = "'v'VVV";
+                setup.SubstituteApiVersionInUrl = true;
+            });
+
+            services.AddSwaggerGen();
+            services.ConfigureOptions<ConfigureSwaggerOptions>();
         }
 
         public void ConfigureContainer(ContainerBuilder builder)
@@ -97,7 +81,7 @@ namespace NetCore.API
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IApiVersionDescriptionProvider provider)
         {
             if (env.IsDevelopment())
             {
@@ -105,10 +89,20 @@ namespace NetCore.API
             }
             app.UseHttpsRedirection();
             app.UseRouting();
+            app.UseCors(config =>
+            {
+                config.AllowAnyOrigin();
+                config.AllowAnyHeader();
+                config.AllowAnyMethod();
+            });
             app.UseSwagger();
             app.UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint($"/swagger/v1/swagger.json", "NetCore v1");
+                provider.ApiVersionDescriptions.ToList().ForEach(description =>
+                {
+                    c.SwaggerEndpoint($"/swagger/{description.GroupName}/swagger.json",
+                        description.GroupName.ToUpperInvariant());
+                });
             });
             app.UseMiddleware<CustomExceptionMiddleware>();
             app.UseMiddleware<AuthenticationMiddleware>();

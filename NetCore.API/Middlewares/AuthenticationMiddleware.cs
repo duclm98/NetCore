@@ -22,7 +22,7 @@ namespace NetCore.API.Middlewares
         {
             string[] ignorePath =
             {
-                "/auth/login"
+                "/v1/auth/login"
             };
 
             if (!ignorePath.Contains(httpContext.Request.Path.Value))

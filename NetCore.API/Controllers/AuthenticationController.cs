@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 
 namespace NetCore.API.Controllers
 {
-    [Route("auth")]
     [ApiController]
+    [ApiVersion("1")]
+    [Route("v{version:apiVersion}/auth")]
     public class AuthenticationController : ControllerBase
     {
         private readonly IUserService _userService;

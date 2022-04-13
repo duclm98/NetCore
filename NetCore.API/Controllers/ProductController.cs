@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 
 namespace NetCore.API.Controllers
 {
-    [Route("products")]
     [ApiController]
+    [ApiVersion("1")]
+    [Route("v{version:apiVersion}/products")]
     public class ProductController : ControllerBase
     {
         private readonly IProductService _productService;
