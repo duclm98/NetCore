@@ -1,6 +1,6 @@
 # ASP.NET Core 3.1 project
-## Technologies
-- ASP.NET Core 3.1
+## Target framework
+- .NET 6.0
 ## How to configure and run
 ### How to generate Database
 - Open Terminal
