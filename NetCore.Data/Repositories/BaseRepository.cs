@@ -24,7 +24,9 @@ namespace NetCore.Data.Repositories
         }
 
         public virtual IQueryable<TEntity> Queryable =>
-            dbSet.IncludeOptimized(x => x.Creator).Where(x => x.DeletedAt == null);
+            dbSet
+                .IncludeOptimized(x => x.Creator)
+                .Where(x => x.DeletedAt == null);
 
         public virtual async Task<TEntity> GetByID(object id)
         {

@@ -2,115 +2,120 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NetCore.Data.Context;
-using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
-namespace NetCore.Data.Migrations
+#nullable disable
+
+namespace NetCore.API.Migrations
 {
     [DbContext(typeof(NetCoreDbContext))]
-    [Migration("20220304104000_InitDB")]
+    [Migration("20220414075028_InitDB")]
     partial class InitDB
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("Relational:MaxIdentifierLength", 63)
-                .HasAnnotation("ProductVersion", "5.0.7")
-                .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                .HasAnnotation("ProductVersion", "6.0.4")
+                .HasAnnotation("Relational:MaxIdentifierLength", 128);
+
+            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
             modelBuilder.Entity("NetCore.Data.Entities.AuditLog", b =>
                 {
                     b.Property<int>("AuditLogId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AuditLogId"), 1L, 1);
 
                     b.Property<string>("ColumnName")
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("NewValues")
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("OldValues")
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PrimaryKey")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("TableName")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Type")
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
                     b.Property<int?>("UserId")
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
                     b.HasKey("AuditLogId");
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("AuditLogs");
+                    b.ToTable("AuditLogs", (string)null);
                 });
 
             modelBuilder.Entity("NetCore.Data.Entities.Category", b =>
                 {
                     b.Property<int>("CategoryId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CategoryId"), 1L, 1);
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("datetime2");
 
                     b.Property<int?>("CreatorId")
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
                     b.Property<DateTime?>("DeletedAt")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("datetime2");
 
                     b.HasKey("CategoryId");
 
                     b.HasIndex("CreatorId");
 
-                    b.ToTable("Categories");
+                    b.ToTable("Categories", (string)null);
 
                     b.HasData(
                         new
                         {
                             CategoryId = 1,
-                            CreatedAt = new DateTime(2022, 3, 4, 17, 39, 59, 692, DateTimeKind.Local).AddTicks(8133),
+                            CreatedAt = new DateTime(2022, 4, 14, 14, 50, 28, 35, DateTimeKind.Local).AddTicks(7095),
                             Name = "Category 1",
-                            UpdatedAt = new DateTime(2022, 3, 4, 17, 39, 59, 692, DateTimeKind.Local).AddTicks(8141)
+                            UpdatedAt = new DateTime(2022, 4, 14, 14, 50, 28, 35, DateTimeKind.Local).AddTicks(7095)
                         },
                         new
                         {
                             CategoryId = 2,
-                            CreatedAt = new DateTime(2022, 3, 4, 17, 39, 59, 692, DateTimeKind.Local).AddTicks(8613),
+                            CreatedAt = new DateTime(2022, 4, 14, 14, 50, 28, 35, DateTimeKind.Local).AddTicks(7096),
                             Name = "Category 2",
-                            UpdatedAt = new DateTime(2022, 3, 4, 17, 39, 59, 692, DateTimeKind.Local).AddTicks(8616)
+                            UpdatedAt = new DateTime(2022, 4, 14, 14, 50, 28, 35, DateTimeKind.Local).AddTicks(7097)
                         },
                         new
                         {
                             CategoryId = 3,
-                            CreatedAt = new DateTime(2022, 3, 4, 17, 39, 59, 692, DateTimeKind.Local).AddTicks(8630),
+                            CreatedAt = new DateTime(2022, 4, 14, 14, 50, 28, 35, DateTimeKind.Local).AddTicks(7097),
                             Name = "Category 3",
-                            UpdatedAt = new DateTime(2022, 3, 4, 17, 39, 59, 692, DateTimeKind.Local).AddTicks(8631)
+                            UpdatedAt = new DateTime(2022, 4, 14, 14, 50, 28, 35, DateTimeKind.Local).AddTicks(7098)
                         });
                 });
 
@@ -118,26 +123,27 @@ namespace NetCore.Data.Migrations
                 {
                     b.Property<int>("InvoiceId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("InvoiceId"), 1L, 1);
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("datetime2");
 
                     b.Property<int?>("CreatorId")
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
                     b.Property<DateTime?>("DeletedAt")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("datetime2");
 
                     b.Property<int>("ProductId")
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("datetime2");
 
                     b.Property<int>("UserId")
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
                     b.HasKey("InvoiceId");
 
@@ -147,81 +153,82 @@ namespace NetCore.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Invoices");
+                    b.ToTable("Invoices", (string)null);
                 });
 
             modelBuilder.Entity("NetCore.Data.Entities.Product", b =>
                 {
                     b.Property<int>("ProductId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ProductId"), 1L, 1);
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("datetime2");
 
                     b.Property<int?>("CreatorId")
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
                     b.Property<DateTime?>("DeletedAt")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Price")
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("datetime2");
 
                     b.HasKey("ProductId");
 
                     b.HasIndex("CreatorId");
 
-                    b.ToTable("Products");
+                    b.ToTable("Products", (string)null);
 
                     b.HasData(
                         new
                         {
                             ProductId = 1,
-                            CreatedAt = new DateTime(2022, 3, 4, 17, 39, 59, 692, DateTimeKind.Local).AddTicks(8987),
+                            CreatedAt = new DateTime(2022, 4, 14, 14, 50, 28, 35, DateTimeKind.Local).AddTicks(7110),
                             Name = "Product 1",
                             Price = 100,
-                            UpdatedAt = new DateTime(2022, 3, 4, 17, 39, 59, 692, DateTimeKind.Local).AddTicks(8990)
+                            UpdatedAt = new DateTime(2022, 4, 14, 14, 50, 28, 35, DateTimeKind.Local).AddTicks(7110)
                         },
                         new
                         {
                             ProductId = 2,
-                            CreatedAt = new DateTime(2022, 3, 4, 17, 39, 59, 692, DateTimeKind.Local).AddTicks(9537),
+                            CreatedAt = new DateTime(2022, 4, 14, 14, 50, 28, 35, DateTimeKind.Local).AddTicks(7111),
                             Name = "Product 2",
                             Price = 200,
-                            UpdatedAt = new DateTime(2022, 3, 4, 17, 39, 59, 692, DateTimeKind.Local).AddTicks(9540)
+                            UpdatedAt = new DateTime(2022, 4, 14, 14, 50, 28, 35, DateTimeKind.Local).AddTicks(7111)
                         },
                         new
                         {
                             ProductId = 3,
-                            CreatedAt = new DateTime(2022, 3, 4, 17, 39, 59, 692, DateTimeKind.Local).AddTicks(9557),
+                            CreatedAt = new DateTime(2022, 4, 14, 14, 50, 28, 35, DateTimeKind.Local).AddTicks(7112),
                             Name = "Product 3",
                             Price = 600,
-                            UpdatedAt = new DateTime(2022, 3, 4, 17, 39, 59, 692, DateTimeKind.Local).AddTicks(9558)
+                            UpdatedAt = new DateTime(2022, 4, 14, 14, 50, 28, 35, DateTimeKind.Local).AddTicks(7112)
                         },
                         new
                         {
                             ProductId = 4,
-                            CreatedAt = new DateTime(2022, 3, 4, 17, 39, 59, 692, DateTimeKind.Local).AddTicks(9559),
+                            CreatedAt = new DateTime(2022, 4, 14, 14, 50, 28, 35, DateTimeKind.Local).AddTicks(7113),
                             Name = "Product 4",
                             Price = 400,
-                            UpdatedAt = new DateTime(2022, 3, 4, 17, 39, 59, 692, DateTimeKind.Local).AddTicks(9560)
+                            UpdatedAt = new DateTime(2022, 4, 14, 14, 50, 28, 35, DateTimeKind.Local).AddTicks(7113)
                         },
                         new
                         {
                             ProductId = 5,
-                            CreatedAt = new DateTime(2022, 3, 4, 17, 39, 59, 692, DateTimeKind.Local).AddTicks(9561),
+                            CreatedAt = new DateTime(2022, 4, 14, 14, 50, 28, 35, DateTimeKind.Local).AddTicks(7114),
                             Name = "Product 5",
                             Price = 900,
-                            UpdatedAt = new DateTime(2022, 3, 4, 17, 39, 59, 692, DateTimeKind.Local).AddTicks(9561)
+                            UpdatedAt = new DateTime(2022, 4, 14, 14, 50, 28, 35, DateTimeKind.Local).AddTicks(7114)
                         });
                 });
 
@@ -229,26 +236,27 @@ namespace NetCore.Data.Migrations
                 {
                     b.Property<int>("ProductInCategoryId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ProductInCategoryId"), 1L, 1);
 
                     b.Property<int>("CategoryId")
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("datetime2");
 
                     b.Property<int?>("CreatorId")
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
                     b.Property<DateTime?>("DeletedAt")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("datetime2");
 
                     b.Property<int>("ProductId")
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("datetime2");
 
                     b.HasKey("ProductInCategoryId");
 
@@ -258,58 +266,59 @@ namespace NetCore.Data.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("ProductInCategories");
+                    b.ToTable("ProductInCategories", (string)null);
                 });
 
             modelBuilder.Entity("NetCore.Data.Entities.User", b =>
                 {
                     b.Property<int>("UserId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("UserId"), 1L, 1);
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("datetime2");
 
                     b.Property<int?>("CreatorId")
-                        .HasColumnType("integer");
+                        .HasColumnType("int");
 
                     b.Property<DateTime?>("DeletedAt")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Password")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("RefreshToken")
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Role")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
+                        .HasColumnType("int")
                         .HasDefaultValue(2);
 
                     b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Username")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("UserId");
 
                     b.HasIndex("CreatorId");
 
-                    b.ToTable("Users");
+                    b.ToTable("Users", (string)null);
 
                     b.HasData(
                         new
                         {
                             UserId = 1,
-                            CreatedAt = new DateTime(2022, 3, 4, 17, 39, 59, 691, DateTimeKind.Local).AddTicks(5093),
+                            CreatedAt = new DateTime(2022, 4, 14, 14, 50, 28, 35, DateTimeKind.Local).AddTicks(7011),
                             Password = "$2a$05$pUOMJMojqb9AEY9ua8mMTOqa70Qyq4kFMiCWKPS8VaCh2N27OP6Ou",
                             Role = 0,
-                            UpdatedAt = new DateTime(2022, 3, 4, 17, 39, 59, 692, DateTimeKind.Local).AddTicks(432),
+                            UpdatedAt = new DateTime(2022, 4, 14, 14, 50, 28, 35, DateTimeKind.Local).AddTicks(7019),
                             Username = "duclm21"
                         });
                 });

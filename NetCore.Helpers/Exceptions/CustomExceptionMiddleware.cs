@@ -30,7 +30,7 @@ namespace NetCore.Helpers.Exceptions
             }
         }
 
-        private Task HandleExceptionAsync(HttpContext context, CustomException exception)
+        private static Task HandleExceptionAsync(HttpContext context, CustomException exception)
         {
             string result;
             context.Response.ContentType = "application/json";
@@ -56,8 +56,9 @@ namespace NetCore.Helpers.Exceptions
             return context.Response.WriteAsync(result);
         }
 
-        private Task HandleExceptionAsync(HttpContext context, Exception exception)
+        private static Task HandleExceptionAsync(HttpContext context, Exception exception)
         {
+            context.Response.ContentType = "application/json";
             string result = new ErrorDetail()
             {
                 Message = exception.Message,

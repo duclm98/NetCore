@@ -1,28 +1,25 @@
 using Autofac.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using NetCore.API.QueueService;
+using System;
 
-namespace NetCore.API
+namespace NetCore.API;
+
+public class Program
 {
-    public class Program
+    public static void Main(string[] args)
     {
-        public static void Main(string[] args)
-        {
-            CreateHostBuilder(args).Run();
-        }
+        CreateHostBuilder(args).Build().Run();
+    }
 
-        public static IHost CreateHostBuilder(string[] args)
-        {
-            var host = Host.CreateDefaultBuilder(args)
-                .ConfigureWebHostDefaults(webBuilder =>
-                {
-                    webBuilder.UseStartup<Startup>();
-                })
-                .UseServiceProviderFactory(new AutofacServiceProviderFactory())
-                .Build();
-            return host;
-        }
+    public static IHostBuilder CreateHostBuilder(string[] args)
+    {
+        AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+        return Host.CreateDefaultBuilder(args)
+            .ConfigureWebHostDefaults(webBuilder =>
+            {
+                webBuilder.UseStartup<Startup>();
+            })
+            .UseServiceProviderFactory(new AutofacServiceProviderFactory());
     }
 }
