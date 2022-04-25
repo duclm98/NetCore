@@ -20,9 +20,9 @@ namespace NetCore.API.Controllers
 
         [SwaggerOperation(Summary = "Danh sách sản phẩm")]
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAll([FromQuery] ProductQuery query)
         {
-            return await _productService.GetAll();
+            return await _productService.GetAll(query);
         }
 
         [SwaggerOperation(Summary = "Chi tiết sản phẩm")]

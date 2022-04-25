@@ -8,18 +8,21 @@ using NetCore.API.Dto.Product;
 using NetCore.API.QueueService;
 using NetCore.API.QueueService.WorkerService;
 using NetCore.API.QueueService.WorkerService.ProductWorkerService;
+using NetCore.Data.Constants;
 using NetCore.Data.Entities;
 using NetCore.Data.Repositories;
 using NetCore.Helpers.Exceptions;
+using NetCore.Helpers.Models;
 using NetCore.Helpers.Result;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace NetCore.API.Services
 {
     public interface IProductService
     {
-        Task<IActionResult> GetAll();
+        Task<IActionResult> GetAll(ProductQuery query);
         Task<IActionResult> GetSingle(int productId);
         Task<IActionResult> Add(ProductCreateDto productCreateDto);
         Task<IActionResult> Update(int productId, ProductUpdateDto productUpdateDto);
@@ -39,9 +42,15 @@ namespace NetCore.API.Services
             _unitOfWork = componentContext.Resolve<UnitOfWork>();
         }
 
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAll(ProductQuery query)
         {
-            var productQueryable = _unitOfWork.ProductRepository.Queryable;
+            var productQueryable = _unitOfWork.ProductRepository.Queryable
+                .Where(x =>
+                    string.IsNullOrEmpty(query.ProductName)
+                    || EF.Functions.Collate(x.Name, SqlConstants.VNCollation).ToLower()
+                        .Contains(query.ProductName.ToLower())
+                );
+            var totalRecord = await productQueryable.CountAsync();
             var products = await productQueryable.ToListAsync();
             var productDtos = GetInfo(products);
 
@@ -49,7 +58,13 @@ namespace NetCore.API.Services
             MonitorLoop monitorLoop = _host.Services.GetRequiredService<MonitorLoop>()!;
             await monitorLoop.MonitorAsync(new Service(new GetProductWorkerService()));
 
-            return new CustomResult("Thành công", productDtos);
+            return new CustomResult("Thành công", new Result
+            {
+                TotalRecord = totalRecord,
+                Data = productDtos,
+                PageCount = query.PageCount,
+                Page = query.Page,
+            });
         }
 
         public async Task<IActionResult> GetSingle(int productId)
