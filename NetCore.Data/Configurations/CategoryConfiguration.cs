@@ -2,16 +2,15 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using NetCore.Data.Entities;
 
-namespace NetCore.Data.Configurations
+namespace NetCore.Data.Configurations;
+
+class CategoryConfiguration : IEntityTypeConfiguration<Category>
 {
-    class CategoryConfiguration : IEntityTypeConfiguration<Category>
+    public void Configure(EntityTypeBuilder<Category> builder)
     {
-        public void Configure(EntityTypeBuilder<Category> builder)
-        {
-            builder.ToTable("Categories");
-            builder.HasKey(x => x.CategoryId);
-            builder.Property(x => x.CategoryId).ValueGeneratedOnAdd().IsRequired();
-            builder.Property(x => x.Name).IsRequired();
-        }
+        builder.ToTable("Categories");
+        builder.HasKey(x => x.CategoryId);
+        builder.Property(x => x.CategoryId).ValueGeneratedOnAdd().IsRequired();
+        builder.Property(x => x.Name).IsRequired();
     }
 }

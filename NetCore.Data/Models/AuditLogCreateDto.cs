@@ -1,8 +1,7 @@
-﻿namespace NetCore.Data.Models
+﻿namespace NetCore.Data.Models;
+
+public class AuditLogCreateDto
 {
-    public class AuditLogCreateDto
-    {
-        public int? UserId { get; set; }
-        public string Method { get; set; }
-    }
+    public int? UserId { get; set; }
+    public string Method { get; set; }
 }

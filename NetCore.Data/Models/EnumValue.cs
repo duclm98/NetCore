@@ -1,9 +1,8 @@
-﻿namespace NetCore.Data.Models
+﻿namespace NetCore.Data.Models;
+
+public class EnumValue
 {
-    public class EnumValue
-    {
-        public int Value { get; set; }
-        public string Name { get; set; }
-        public string DisplayName { get; set; }
-    }
+    public int Value { get; set; }
+    public string Name { get; set; }
+    public string DisplayName { get; set; }
 }
