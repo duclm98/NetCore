@@ -37,8 +37,9 @@ public class UnitOfWork : IDisposable
     {
         get
         {
-            if (userRepository == null)
-                userRepository = new BaseRepository<User>(context, httpContextAccessor);
+            userRepository ??= new BaseRepository<User>(context, httpContextAccessor);
+            //if (userRepository == null)
+            //    userRepository = new BaseRepository<User>(context, httpContextAccessor);
             return userRepository;
         }
     }
@@ -48,8 +49,7 @@ public class UnitOfWork : IDisposable
     {
         get
         {
-            if (productRepository == null)
-                productRepository = new BaseRepository<Product>(context, httpContextAccessor);
+            productRepository ??= new BaseRepository<Product>(context, httpContextAccessor);
             return productRepository;
         }
     }
@@ -59,8 +59,7 @@ public class UnitOfWork : IDisposable
     {
         get
         {
-            if (categoryRepository == null)
-                categoryRepository = new BaseRepository<Category>(context, httpContextAccessor);
+            categoryRepository ??= new BaseRepository<Category>(context, httpContextAccessor);
             return categoryRepository;
         }
     }
@@ -70,8 +69,7 @@ public class UnitOfWork : IDisposable
     {
         get
         {
-            if (productInCategoryRepository == null)
-                productInCategoryRepository = new BaseRepository<ProductInCategory>(context, httpContextAccessor);
+            productInCategoryRepository ??= new BaseRepository<ProductInCategory>(context, httpContextAccessor);
             return productInCategoryRepository;
         }
     }
